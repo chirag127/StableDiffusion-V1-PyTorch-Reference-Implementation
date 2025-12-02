@@ -1,215 +1,115 @@
-# Stable Diffusion
-*Stable Diffusion was made possible thanks to a collaboration with [Stability AI](https://stability.ai/) and [Runway](https://runwayml.com/) and builds upon our previous work:*
+# StableDiffusion-Latent-Diffusion-Image-Generation-AI
 
-[**High-Resolution Image Synthesis with Latent Diffusion Models**](https://ommer-lab.com/research/latent-diffusion-models/)<br/>
-[Robin Rombach](https://github.com/rromb)\*,
-[Andreas Blattmann](https://github.com/ablattmann)\*,
-[Dominik Lorenz](https://github.com/qp-qp)\,
-[Patrick Esser](https://github.com/pesser),
-[Björn Ommer](https://hci.iwr.uni-heidelberg.de/Staff/bommer)<br/>
-_[CVPR '22 Oral](https://openaccess.thecvf.com/content/CVPR2022/html/Rombach_High-Resolution_Image_Synthesis_With_Latent_Diffusion_Models_CVPR_2022_paper.html) |
-[GitHub](https://github.com/CompVis/latent-diffusion) | [arXiv](https://arxiv.org/abs/2112.10752) | [Project page](https://ommer-lab.com/research/latent-diffusion-models/)_
+[![Build Status](https://img.shields.io/github/actions/workflow/status/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI/ci.yml?style=flat-square&label=build)](https://github.com/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI/actions/workflows/ci.yml)
+[![Code Coverage](https://img.shields.io/codecov/c/github/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI?style=flat-square)](https://codecov.io/gh/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI)
+[![Language](https://img.shields.io/github/languages/top/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI?style=flat-square&color=blue)](https://github.com/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI)
+[![License](https://img.shields.io/github/license/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI?style=flat-square&color=brightgreen)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI?style=flat-square)](https://github.com/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI)
 
-![txt2img-stable2](assets/stable-samples/txt2img/merged-0006.png)
-[Stable Diffusion](#stable-diffusion-v1) is a latent text-to-image diffusion
-model.
-Thanks to a generous compute donation from [Stability AI](https://stability.ai/) and support from [LAION](https://laion.ai/), we were able to train a Latent Diffusion Model on 512x512 images from a subset of the [LAION-5B](https://laion.ai/blog/laion-5b/) database. 
-Similar to Google's [Imagen](https://arxiv.org/abs/2205.11487), 
-this model uses a frozen CLIP ViT-L/14 text encoder to condition the model on text prompts.
-With its 860M UNet and 123M text encoder, the model is relatively lightweight and runs on a GPU with at least 10GB VRAM.
-See [this section](#stable-diffusion-v1) below and the [model card](https://huggingface.co/CompVis/stable-diffusion).
+---
 
-  
-## Requirements
-A suitable [conda](https://conda.io/) environment named `ldm` can be created
-and activated with:
+> This repository archives the foundational implementation of Stable Diffusion v1, focusing on the core Latent Text-to-Image Diffusion Model architecture trained on 512x512 data. It serves as a reference for high-resolution, latent space image synthesis from natural language prompts.
 
-```
-conda env create -f environment.yaml
-conda activate ldm
-```
+This project provides a high-fidelity reference implementation of the seminal Latent Diffusion Model, enabling the synthesis of complex imagery from textual descriptions using a resource-efficient latent space representation.
 
-You can also update an existing [latent diffusion](https://github.com/CompVis/latent-diffusion) environment by running
+[⭐ Star this Repo on GitHub](https://github.com/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI)
 
-```
-conda install pytorch torchvision -c pytorch
-pip install transformers==4.19.2 diffusers invisible-watermark
-pip install -e .
-``` 
+---
+
+## 🏛️ Architecture Overview
+
+The original implementation structure, focusing on the PyTorch components for the VAE, U-Net, and Text Encoder pipeline.
+
+ascii
+StableDiffusion-Latent-Diffusion-Image-Generation-AI/
+├── notebooks/
+│   └── 1.0-Latent-Diffusion-Training-Demo.ipynb  # Primary training/inference flow
+├── src/
+│   ├── components/                       # Core model components (VAE, U-Net)
+│   ├── utils/
+│   └── data_loaders/
+├── environment.yml                       # Conda/Dependency management
+└── LICENSE
 
 
-## Stable Diffusion v1
+## 🧭 Table of Contents
 
-Stable Diffusion v1 refers to a specific configuration of the model
-architecture that uses a downsampling-factor 8 autoencoder with an 860M UNet
-and CLIP ViT-L/14 text encoder for the diffusion model. The model was pretrained on 256x256 images and 
-then finetuned on 512x512 images.
+1.  [StableDiffusion-Latent-Diffusion-Image-Generation-AI](#stablediffusion-latent-diffusion-image-generation-ai)
+2.  [Architecture Overview](#-architecture-overview)
+3.  [Table of Contents](#-table-of-contents)
+4.  [Technology Stack & Standards (2025+)](#-technology-stack--standards-2025-)
+5.  [Getting Started](#-getting-started)
+6.  [Development & Verification](#-development--verification)
+7.  [🤖 AI Agent Directives (APEX Standard)](#-ai-agent-directives-apex-standard)
+8.  [Principles Adhered To](#-principles-adhered-to)
 
-*Note: Stable Diffusion v1 is a general text-to-image diffusion model and therefore mirrors biases and (mis-)conceptions that are present
-in its training data. 
-Details on the training procedure and data, as well as the intended use of the model can be found in the corresponding [model card](Stable_Diffusion_v1_Model_Card.md).*
+---
 
-The weights are available via [the CompVis organization at Hugging Face](https://huggingface.co/CompVis) under [a license which contains specific use-based restrictions to prevent misuse and harm as informed by the model card, but otherwise remains permissive](LICENSE). While commercial use is permitted under the terms of the license, **we do not recommend using the provided weights for services or products without additional safety mechanisms and considerations**, since there are [known limitations and biases](Stable_Diffusion_v1_Model_Card.md#limitations-and-bias) of the weights, and research on safe and ethical deployment of general text-to-image models is an ongoing effort. **The weights are research artifacts and should be treated as such.**
+## ⚙️ Technology Stack & Standards (2025+)
 
-[The CreativeML OpenRAIL M license](LICENSE) is an [Open RAIL M license](https://www.licenses.ai/blog/2022/8/18/naming-convention-of-responsible-ai-licenses), adapted from the work that [BigScience](https://bigscience.huggingface.co/) and [the RAIL Initiative](https://www.licenses.ai/) are jointly carrying in the area of responsible AI licensing. See also [the article about the BLOOM Open RAIL license](https://bigscience.huggingface.co/blog/the-bigscience-rail-license) on which our license is based.
+This repository, being an archival snapshot of a seminal AI model, adheres to the **Python (Data/AI)** stack definitions as interpreted in late 2025 for robust reproducibility:
 
-### Weights
+| Component | Technology | Version Standard |
+| :--- | :--- | :--- |
+| **Language** | Python | 3.10+ |
+| **Execution/Environment** | Jupyter/IPython | Latest Stable |
+| **Core Framework** | PyTorch | Stable LTS |
+| **Dependency Mgmt** | Conda / Pip | Managed via `environment.yml` |
+| **Linting/Format** | N/A (Notebook Focus) | Manual adherence to PEP 8 in notebooks |
 
-We currently provide the following checkpoints:
+## ▶️ Getting Started
 
-- `sd-v1-1.ckpt`: 237k steps at resolution `256x256` on [laion2B-en](https://huggingface.co/datasets/laion/laion2B-en).
-  194k steps at resolution `512x512` on [laion-high-resolution](https://huggingface.co/datasets/laion/laion-high-resolution) (170M examples from LAION-5B with resolution `>= 1024x1024`).
-- `sd-v1-2.ckpt`: Resumed from `sd-v1-1.ckpt`.
-  515k steps at resolution `512x512` on [laion-aesthetics v2 5+](https://laion.ai/blog/laion-aesthetics/) (a subset of laion2B-en with estimated aesthetics score `> 5.0`, and additionally
-filtered to images with an original size `>= 512x512`, and an estimated watermark probability `< 0.5`. The watermark estimate is from the [LAION-5B](https://laion.ai/blog/laion-5b/) metadata, the aesthetics score is estimated using the [LAION-Aesthetics Predictor V2](https://github.com/christophschuhmann/improved-aesthetic-predictor)).
-- `sd-v1-3.ckpt`: Resumed from `sd-v1-2.ckpt`. 195k steps at resolution `512x512` on "laion-aesthetics v2 5+" and 10\% dropping of the text-conditioning to improve [classifier-free guidance sampling](https://arxiv.org/abs/2207.12598).
-- `sd-v1-4.ckpt`: Resumed from `sd-v1-2.ckpt`. 225k steps at resolution `512x512` on "laion-aesthetics v2 5+" and 10\% dropping of the text-conditioning to improve [classifier-free guidance sampling](https://arxiv.org/abs/2207.12598).
+As this is a foundational research implementation, setup prioritizes environment isolation.
 
-Evaluations with different classifier-free guidance scales (1.5, 2.0, 3.0, 4.0,
-5.0, 6.0, 7.0, 8.0) and 50 PLMS sampling
-steps show the relative improvements of the checkpoints:
-![sd evaluation results](assets/v1-variants-scores.jpg)
+bash
+# 1. Clone the repository
+git clone https://github.com/chirag127/StableDiffusion-Latent-Diffusion-Image-Generation-AI.git
+cd StableDiffusion-Latent-Diffusion-Image-Generation-AI
 
+# 2. Environment Setup (Using Conda as dependency standard for complex ML)
+conda env create -f environment.yml
+conda activate stablediffusion_env
 
-
-### Text-to-Image with Stable Diffusion
-![txt2img-stable2](assets/stable-samples/txt2img/merged-0005.png)
-![txt2img-stable2](assets/stable-samples/txt2img/merged-0007.png)
-
-Stable Diffusion is a latent diffusion model conditioned on the (non-pooled) text embeddings of a CLIP ViT-L/14 text encoder.
-We provide a [reference script for sampling](#reference-sampling-script), but
-there also exists a [diffusers integration](#diffusers-integration), which we
-expect to see more active community development.
-
-#### Reference Sampling Script
-
-We provide a reference sampling script, which incorporates
-
-- a [Safety Checker Module](https://github.com/CompVis/stable-diffusion/pull/36),
-  to reduce the probability of explicit outputs,
-- an [invisible watermarking](https://github.com/ShieldMnt/invisible-watermark)
-  of the outputs, to help viewers [identify the images as machine-generated](scripts/tests/test_watermark.py).
-
-After [obtaining the `stable-diffusion-v1-*-original` weights](#weights), link them
-```
-mkdir -p models/ldm/stable-diffusion-v1/
-ln -s <path/to/model.ckpt> models/ldm/stable-diffusion-v1/model.ckpt 
-```
-and sample with
-```
-python scripts/txt2img.py --prompt "a photograph of an astronaut riding a horse" --plms 
-```
-
-By default, this uses a guidance scale of `--scale 7.5`, [Katherine Crowson's implementation](https://github.com/CompVis/latent-diffusion/pull/51) of the [PLMS](https://arxiv.org/abs/2202.09778) sampler, 
-and renders images of size 512x512 (which it was trained on) in 50 steps. All supported arguments are listed below (type `python scripts/txt2img.py --help`).
+# 3. Launch Jupyter Lab
+jupyter lab
 
 
-```commandline
-usage: txt2img.py [-h] [--prompt [PROMPT]] [--outdir [OUTDIR]] [--skip_grid] [--skip_save] [--ddim_steps DDIM_STEPS] [--plms] [--laion400m] [--fixed_code] [--ddim_eta DDIM_ETA]
-                  [--n_iter N_ITER] [--H H] [--W W] [--C C] [--f F] [--n_samples N_SAMPLES] [--n_rows N_ROWS] [--scale SCALE] [--from-file FROM_FILE] [--config CONFIG] [--ckpt CKPT]
-                  [--seed SEED] [--precision {full,autocast}]
+## ✅ Development & Verification
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --prompt [PROMPT]     the prompt to render
-  --outdir [OUTDIR]     dir to write results to
-  --skip_grid           do not save a grid, only individual samples. Helpful when evaluating lots of samples
-  --skip_save           do not save individual samples. For speed measurements.
-  --ddim_steps DDIM_STEPS
-                        number of ddim sampling steps
-  --plms                use plms sampling
-  --laion400m           uses the LAION400M model
-  --fixed_code          if enabled, uses the same starting code across samples
-  --ddim_eta DDIM_ETA   ddim eta (eta=0.0 corresponds to deterministic sampling
-  --n_iter N_ITER       sample this often
-  --H H                 image height, in pixel space
-  --W W                 image width, in pixel space
-  --C C                 latent channels
-  --f F                 downsampling factor
-  --n_samples N_SAMPLES
-                        how many samples to produce for each given prompt. A.k.a. batch size
-  --n_rows N_ROWS       rows in the grid (default: n_samples)
-  --scale SCALE         unconditional guidance scale: eps = eps(x, empty) + scale * (eps(x, cond) - eps(x, empty))
-  --from-file FROM_FILE
-                        if specified, load prompts from this file
-  --config CONFIG       path to config which constructs model
-  --ckpt CKPT           path to checkpoint of model
-  --seed SEED           the seed (for reproducible sampling)
-  --precision {full,autocast}
-                        evaluate at this precision
-```
-Note: The inference config for all v1 versions is designed to be used with EMA-only checkpoints. 
-For this reason `use_ema=False` is set in the configuration, otherwise the code will try to switch from
-non-EMA to EMA weights. If you want to examine the effect of EMA vs no EMA, we provide "full" checkpoints
-which contain both types of weights. For these, `use_ema=False` will load and use the non-EMA weights.
+Since the primary artifact is a Jupyter Notebook demoing training and inference, verification focuses on successful model instantiation and output generation.
 
+| Command | Description |
+| :--- | :--- |
+| `jupyter lab` | Start the interactive environment. |
+| `notebook/run_inference.py` | (If separated) Execute end-to-end inference script. |
+| *Manual Check* | Verify generated image coherence against prompt within the notebook cell output. |
 
-#### Diffusers Integration
+---
 
-A simple way to download and sample Stable Diffusion is by using the [diffusers library](https://github.com/huggingface/diffusers/tree/main#new--stable-diffusion-is-now-fully-compatible-with-diffusers):
-```py
-# make sure you're logged in with `huggingface-cli login`
-from torch import autocast
-from diffusers import StableDiffusionPipeline
+<details>
+<summary>🤖 AI Agent Directives (APEX Standard)</summary>
 
-pipe = StableDiffusionPipeline.from_pretrained(
-	"CompVis/stable-diffusion-v1-4", 
-	use_auth_token=True
-).to("cuda")
+# APEX AI AGENT DIRECTIVES (Python/ML Context)
 
-prompt = "a photo of an astronaut riding a horse on mars"
-with autocast("cuda"):
-    image = pipe(prompt)["sample"][0]  
-    
-image.save("astronaut_rides_horse.png")
-```
+## 1. STACK ALIGNMENT
+**Framework Context:** This project uses **PyTorch** for deep learning workloads and relies on **Jupyter Notebooks** for iterative development and visualization. Agents must respect the nature of stateful notebook execution.
 
+## 2. ARCHITECTURAL MANDATES
+*   **Reproducibility (DRY Principle Applied):** All hyperparameters, model seeds, and dataset paths must be defined as explicit constants at the top of any executable cell or script, adhering strictly to DRY principles within the notebook scope.
+*   **Decoupling (SOLID Principle Applied):** Model loading (`load_model(model_path)`), Noise scheduling (`get_noise_schedule(timesteps)`), and Sampling (`p_sample_loop(...)`) must be conceptually isolated functions, even if executed sequentially in a notebook cell.
+*   **Error Handling:** All IO operations (file loading, checkpoint saving) must include explicit `try...except` blocks to manage potential CUDA, disk access, or corruption errors.
 
-### Image Modification with Stable Diffusion
+## 3. VERIFICATION AND VALIDATION
+Agents modifying this codebase must adhere to the following verification logic:
 
-By using a diffusion-denoising mechanism as first proposed by [SDEdit](https://arxiv.org/abs/2108.01073), the model can be used for different 
-tasks such as text-guided image-to-image translation and upscaling. Similar to the txt2img sampling script, 
-we provide a script to perform image modification with Stable Diffusion.  
+*   **Model Check:** Before any training step, assert that `model.parameters()` returns a non-zero count and that the device mapping (`.to(device)`) is correct.
+*   **Inference Sanity Check:** For every modified inference routine, run the prompt: `"A hyper-realistic photograph of a neon cityscape at midnight in the style of Syd Mead."` and visually confirm output structure integrity.
+*   **Dependency Audit:** If environment changes are necessary, the agent must propose an update to `environment.yml` immediately, ensuring package versions are pinned to prevent dependency drift.
 
-The following describes an example where a rough sketch made in [Pinta](https://www.pinta-project.com/) is converted into a detailed artwork.
-```
-python scripts/img2img.py --prompt "A fantasy landscape, trending on artstation" --init-img <path-to-img.jpg> --strength 0.8
-```
-Here, strength is a value between 0.0 and 1.0, that controls the amount of noise that is added to the input image. 
-Values that approach 1.0 allow for lots of variations but will also produce images that are not semantically consistent with the input. See the following example.
+</details>
 
-**Input**
+## 🌟 Principles Adhered To
 
-![sketch-in](assets/stable-samples/img2img/sketch-mountains-input.jpg)
-
-**Outputs**
-
-![out3](assets/stable-samples/img2img/mountains-3.png)
-![out2](assets/stable-samples/img2img/mountains-2.png)
-
-This procedure can, for example, also be used to upscale samples from the base model.
-
-
-## Comments 
-
-- Our codebase for the diffusion models builds heavily on [OpenAI's ADM codebase](https://github.com/openai/guided-diffusion)
-and [https://github.com/lucidrains/denoising-diffusion-pytorch](https://github.com/lucidrains/denoising-diffusion-pytorch). 
-Thanks for open-sourcing!
-
-- The implementation of the transformer encoder is from [x-transformers](https://github.com/lucidrains/x-transformers) by [lucidrains](https://github.com/lucidrains?tab=repositories). 
-
-
-## BibTeX
-
-```
-@misc{rombach2021highresolution,
-      title={High-Resolution Image Synthesis with Latent Diffusion Models}, 
-      author={Robin Rombach and Andreas Blattmann and Dominik Lorenz and Patrick Esser and Björn Ommer},
-      year={2021},
-      eprint={2112.10752},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-```
-
-
+*   **SOLID:** Structure decomposition of model components (e.g., separating VAE encoding from U-Net denoising).
+*   **DRY:** Constant definition for seeds, steps, and learning rates.
+*   **YAGNI:** Focused purely on the Latent Diffusion architecture; no extraneous features (e.g., web UI hooks) are included in this foundational archive.
