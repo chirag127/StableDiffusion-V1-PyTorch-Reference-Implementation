@@ -1,58 +1,64 @@
 ---
 name: Bug Report
-about: Report a reproducible bug or unexpected behavior.
-title: "🐞 BUG: <A brief, descriptive title>"
-labels: ["bug", "needs-triage"]
----
+about: "Report a bug in the implementation of the Stable Diffusion latent diffusion model."
+title: "[Bug] - Describe the issue concisely"
+labels: "bug"
+assignees:
 
-### Prerequisites
+body:
+  - type: markdown
+    attributes:
+      value: | # Use this template to report bugs. Provide as much detail as possible.
+        # **1. Project Context**
+        *   **Repository:** [`StableDiffusion-Latent-Diffusion-AI-Image-Generator-Python-Notebook`](https://github.com/chirag127/StableDiffusion-Latent-Diffusion-AI-Image-Generator-Python-Notebook)
+        *   **AI Agent Directives Reference:** [AGENTS.md](https://github.com/chirag127/StableDiffusion-Latent-Diffusion-AI-Image-Generator-Python-Notebook/blob/main/AGENTS.md)
+        *   **Issue Reporter:** @${github.actor}
 
-Before submitting, please ensure you have completed the following steps:
+        ## :bug: Bug Description
+        Please provide a clear and detailed description of the bug you encountered. What did you expect to happen, and what actually happened?
 
-- [ ] I have searched the [existing issues](https://github.com/chirag127/StableFlow-AI-Image-Generation-Jupyter-Notebook/issues) to prevent creating a duplicate.
-- [ ] I have read the [CONTRIBUTING.md](https://github.com/chirag127/StableFlow-AI-Image-Generation-Jupyter-Notebook/blob/main/.github/CONTRIBUTING.md) for this project.
-- [ ] I am reporting a reproducible bug, not a feature request or a question.
+  - type: markdown
+    attributes:
+      value: | # **2. Steps to Reproduce**
+        Please provide the exact steps to reproduce the bug. If possible, include code snippets or notebook cell outputs.
 
-### Bug Description
+        1.  Go to '...' steps
+        2.  Click on '....'
+        3.  Scroll down to '....'
+        4.  See error
 
-A clear and concise description of what the bug is. What went wrong? Why do you believe this is a bug?
+  - type: markdown
+    attributes:
+      value: | # **3. Environment Details**
+        Specify the environment where the bug occurred. This is crucial for debugging.
 
-### Steps to Reproduce
+        *   **Operating System:** (e.g., Windows 11, macOS Sonoma, Ubuntu 22.04)
+        *   **Python Version:** (e.g., Python 3.10.12)
+        *   **PyTorch Version:** (e.g., PyTorch 2.1.0)
+        *   **Dependencies:** (List key installed libraries and their versions, e.g., `diffusers==0.20.0`, `transformers==4.33.0`)
+        *   **Notebook Environment:** (e.g., JupyterLab 3.6.5, VS Code Notebooks)
+        *   **Hardware:** (e.g., NVIDIA RTX 4090 with 24GB VRAM, Google Colab GPU, CPU)
 
-Please provide a minimal, self-contained set of steps to reliably reproduce the bug. Vague reports will be closed.
+  - type: markdown
+    attributes:
+      value: | # **4. Expected Behavior vs. Actual Behavior**
 
-1. Go to '...'
-2. Run cell '...'
-3. With input '...'
-4. See error '...'
+        **Expected Behavior:**
+        [Describe what you expected to happen.]
 
-### Expected Behavior
+        **Actual Behavior:**
+        [Describe what actually happened.]
 
-A clear and concise description of what you expected to happen.
+  - type: markdown
+    attributes:
+      value: | # **5. Screenshots / Logs (Optional)**
+        If applicable, add screenshots to help explain the problem. You can attach files by dragging and dropping them into the comment area.
 
-### Actual Behavior
+        log
+        [Paste relevant log snippets here.]
+        
 
-A clear and concise description of what actually happened. Include stack traces and error messages in the section below.
-
-### Environment Details
-
-Please provide the following details about your environment. This is crucial for debugging.
-
-- **Operating System:** (e.g., Ubuntu 22.04, macOS Sonoma, Windows 11)
-- **Python Version:** (e.g., `python --version`)
-- **Jupyter Version:** (e.g., `jupyter --version`)
-- **Key Libraries:** (run `pip list | grep -E 'torch|transformers|diffusers|accelerate'` and paste the output)
-- **GPU Model & VRAM:** (e.g., NVIDIA RTX 4090, 24GB VRAM)
-- **CUDA/Driver Version:** (e.g., `nvidia-smi`)
-
-### Screenshots & Logs
-
-If applicable, add screenshots to help explain your problem. For errors, please paste the full, unedited stack trace or log output below inside the code block.
-
-text
-<PASTE FULL LOGS OR STACK TRACE HERE>
-
-
-### Additional Context
-
-Add any other context about the problem here. For example, did this work in a previous version? Have you tried any workarounds?
+  - type: markdown
+    attributes:
+      value: | # **6. Additional Information (Optional)**
+        Any other context about the problem. You can provide additional information or suggestions here.
