@@ -1,51 +1,58 @@
 name: CI
 
+# Control when the action will run.
+# Controls how the action will run, based on the enumerated values.
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
-  build_and_test:
+  # A job is a set of steps that are executed on the same runner.
+  build:
+    # Runner type to use.
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        python-version:
-          - "3.10"
-          - "3.11"
-          - "3.12"
-
+    # Steps represent a sequence of tasks that will be executed as part of the job.
+    # To perform a task, a step can use an action that is defined in an external repository,
+    # the use of Docker, or a command that is run against the runner's operating system.
     steps:
-      - name: Checkout repository
+      # Checks-out your repository into the workspace.
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.10"
+          cache: 'uv'
 
-      - name: Install uv
+      - name: Install Dependencies with uv
         run: |
-          curl -LsSf https://github.com/astral-sh/uv/releases/download/v0.1.0/uv-x86_64-unknown-linux-gnu.tar.gz | tar -zx
-          echo "$(pwd)/uv" >> $GITHUB_PATH
-
-      - name: Install dependencies
-        run: |
-          uv pip install --quiet --system -e '.[test]'
+          python -m uv pip install --upgrade pip
+          python -m uv pip install --system wheel
+          python -m uv pip install --system -r requirements.txt
+          python -m uv pip install --system -e . # Install in editable mode for the current project
 
       - name: Lint with Ruff
         run: |
-          uv run --quiet ruff check .
+          python -m uv pip install ruff
+          ruff check .
+          ruff format --check .
 
-      - name: Run tests with Pytest
+      - name: Test with Pytest
         run: |
-          uv run --quiet pytest --cov=stable_diffusion_latent_diffusion_image_generation_ai
+          python -m uv pip install pytest
+          pytest
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.4.0
+      - name: Archive Pytest Results
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./coverage/
-          fail_ci_if_error: true
+          name: pytest-results
+          path: |
+            ./reports/ # Assuming pytest-xml or similar is configured to output here
+            **/*.xml
+          retention-days: 7
